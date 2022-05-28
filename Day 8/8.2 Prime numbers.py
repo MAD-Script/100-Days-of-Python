@@ -1,13 +1,12 @@
 #Write your code below this line 👇
-from xmlrpc.client import boolean
 
 
 def prime_checker(number):
-    prime = True
+    is_prime = True
     for num in range(2,number):
         if number % num == 0:
-            prime = False
-    if prime:
+            is_prime = False
+    if is_prime:
         print("It's a prime number")
     else:
         print("It's not a prime number")
