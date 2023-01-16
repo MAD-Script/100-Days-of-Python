@@ -64,6 +64,9 @@
 import random,os
 from blackjack_art import logo,win,lose,draw,blackjack
 
+def compare(computer_score,user_score):
+    return (21-computer_score < 21-user_score) and computer_score < 21
+
 def print_newline(count):
     for i in range(count):
         print("\n")
@@ -87,6 +90,8 @@ def calculate_cards(cards):
 
 # Game code
 def play_blackjack():
+    user_cards = []
+    computer_cards = []
     is_game_over = False
     
     for i in range(2):
@@ -136,7 +141,7 @@ def play_blackjack():
         print(lose)  
     elif (computer_score == user_score):
         print(draw)
-    elif(21-computer_score < 21-user_score and computer_score > 21):
+    elif(compare(computer_score,user_score)):
         print(lose)    
         print("Computer Wins !!")
     elif(user_score < 21 ):
@@ -158,9 +163,6 @@ def play_blackjack():
 keep_playing = True
 while(keep_playing):
     os.system('cls' if os.name == 'nt' else 'clear')
-    user_cards = []
-    computer_cards = []
-    
     print(logo)
     
     if(not(input("Start Game? y/n : ") == 'y')):
