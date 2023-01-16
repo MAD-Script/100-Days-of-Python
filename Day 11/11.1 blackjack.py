@@ -64,12 +64,24 @@
 import random,os
 from blackjack_art import logo,win,lose,draw,blackjack
 
-def compare(computer_score,user_score):
-    return (21-computer_score < 21-user_score) and computer_score < 21
+def clear():
+    os.system('cls' if os.name == 'nt' else 'clear')
 
-def print_newline(count):
-    for i in range(count):
-        print("\n")
+def compare(computer_score,user_score):
+    if user_score == computer_score:
+        return draw
+    elif computer_score == 0:
+        return lose + "Computer has a blackjack !!"
+    elif user_score == 0:
+        return blackjack + win
+    elif user_score > 21:
+        return lose + "You went over 21"
+    elif computer_score > 21:
+        return win + "Computer went over !"
+    elif user_score > computer_score:
+        return win
+    else:
+        return lose       
 
 #  deal card function    
 def deal_card():
@@ -79,13 +91,13 @@ def deal_card():
 # calculating score
 def calculate_cards(cards):
     
+    if sum(cards) == 21 and len(cards) == 2:
+        return 0
+    
     while sum(cards) > 21 and 11 in cards:
         cards.remove(11)
         cards.append(1)
 
-    if sum(cards) == 21:
-        return 0
-    
     return sum(cards)
 
 # Game code
@@ -105,64 +117,38 @@ def play_blackjack():
         print(f"Your cards: {user_cards}, Your Score: {user_score}")
         print(f"Computers First card: {computer_cards[0]}")
         
-        print_newline(1)
-        if (computer_score == 0):
-            is_game_over = True
-            break
-        elif(user_score == 0):
-            # print("You scored a Blackjack !!")
-            print(blackjack)
-            is_game_over = True
-            break
-        elif(user_score > 21):
-            print("You exceeded 21 !!")
-            is_game_over = True 
-            
+        print("\n")
         
+        if(user_score == 0 or computer_score == 0 or user_score > 21):
+            is_game_over = True
+            break
         
         if(not is_game_over and input("Type 'y' to deal another card, type 'n' to pass: ") == 'y'):
             user_cards.append(deal_card())
             user_score = calculate_cards(user_cards)
             if(user_score > 21):
-                print("You exceeded 21 !!")
                 is_game_over = True 
+                break
         else:
             is_game_over = True
-        
-        
-            
-            
-    while(computer_score <= 16 and (computer_score != 0) and user_score < 21):
+                
+    while(computer_score <= 16 and computer_score != 0 and user_score < 22 and user_score != 0):
         computer_cards.append(deal_card())
         computer_score = calculate_cards(computer_cards)
-    
-    if (computer_score == 0):
-        print("Computer gets a Blackjack !! Computer Wins !! ")    
-        print(lose)  
-    elif (computer_score == user_score):
-        print(draw)
-    elif(compare(computer_score,user_score)):
-        print(lose)    
-        print("Computer Wins !!")
-    elif(user_score < 21 ):
-        print(win)
-    else:
-        print(lose)
-    
+
+    clear()    
+    print(compare(computer_score,user_score))
     print(f"Computer cards: {computer_cards} , Score: {computer_score}")
     print(f"Your cards: {user_cards}, you scored: {user_score}")
     
         
 
     
-        
-        
-    
     
 
 keep_playing = True
 while(keep_playing):
-    os.system('cls' if os.name == 'nt' else 'clear')
+    clear()
     print(logo)
     
     if(not(input("Start Game? y/n : ") == 'y')):
@@ -171,7 +157,7 @@ while(keep_playing):
     
     play_blackjack()
     
-    print_newline(1)
+    print("\n")
     if(input("Play again? y/n : ") != 'y'):
         keep_playing= False    
     
